@@ -27,7 +27,15 @@ void Mesh::CreateMesh(GLfloat * vertices, unsigned int *indices, unsigned int nV
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0])*nVertices, vertices, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	// first value is the layout location (the one we set in our shaders!),
+	// Second value : the size (3 values x,y,z per vertex) at a time
+	// Third value : datatype of the vertex
+	// Fourth value :if we want to normalise 
+	// Fifth value : stride value (say you are storing position and color data in the same vbo) we can give an offset
+	// Sixth value : CAn give an offset from where you want to read (not necessary if you are using individually)
+	
 	glEnableVertexAttribArray(0);
+	//Again laylout location
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);			// Unbinding VBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);	// Unbinding IBO
@@ -40,6 +48,7 @@ void Mesh::RenderMesh()
 	glBindVertexArray(VAO);	// Binding VAO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);	// Binding IBO
 	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);	//  Draw using Elements/Indices
+	//glDrawArrays(GL_TRIANGLES, 0, 3);	//  Draw using Vertex data
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);	// UnBinding IBO
 	glBindVertexArray(0);	// UnBinding VAO
 }
