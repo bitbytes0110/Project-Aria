@@ -3,9 +3,8 @@
 
 
 Window::Window()
+	:Window(WIDTH, HEIGHT)
 {
-	width = WIDTH;
-	height = HEIGHT;
 }
 
 Window::Window(GLint windowWidth, GLint windowHeight)
@@ -13,8 +12,6 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	width = windowWidth;
 	height = windowHeight;
 }
-
-
 
 int Window::Initialise()
 {
@@ -65,9 +62,7 @@ int Window::Initialise()
 		glfwTerminate();
 		return 1;
 	}
-
-
-
+	
 	glEnable(GL_DEPTH_TEST);
 
 	// Setup viewport Size
