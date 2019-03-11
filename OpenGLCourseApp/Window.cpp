@@ -11,6 +11,8 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	width = windowWidth;
 	height = windowHeight;
 
+	mouseFirstMoved = true;
+
 	for (size_t i = 0; i < 1024; i++)
 	{
 		keys[i] = 0;
@@ -19,7 +21,6 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 
 int Window::Initialise()
 {
-	//Initialise GLFW
 	if (!glfwInit())
 	{
 		cout << "GLFW initialization failed!" << endl;
@@ -27,15 +28,10 @@ int Window::Initialise()
 		return 1;
 	}
 
-	// Setup GLFW window properties
-	// OpenGL version
-
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	// Core profile = No Backwards compatilbility
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	// Allow forward compatibility
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);	// Core profile = No Backwards compatilbility
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);			// Allow forward compatibility
 
 	mainWindow = glfwCreateWindow(width, height, "Aria", NULL, NULL);
 	if (!mainWindow)
@@ -44,25 +40,18 @@ int Window::Initialise()
 		glfwTerminate();
 		return 1;
 	}
-
 	
 	glfwGetFramebufferSize(mainWindow, &bufferWidth, &bufferHeight);
-
 
 	// Set the context for GLEW to use
 	glfwMakeContextCurrent(mainWindow);
 
 	// Handle Key + mouse input
-
 	createCallbacks();
 
 	//	Don't display mouse pointer
 	//	We do this so that the mouse pointer doesn't go outside the screen
 	glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);	
-
-	// Callback for resizing the buffers when resizing the window
-	glfwSetFramebufferSizeCallback(mainWindow, framebuffer_size_callback);
-
 
 	//Allow modern extension features
 	glewExperimental = GL_TRUE;
@@ -80,16 +69,18 @@ int Window::Initialise()
 	// Setup viewport Size
 	glViewport(0, 0, bufferWidth, bufferHeight);
 
-	// We are using this function to save the owner of the main window to GLFW and access it in a static function outside our class!
-	glfwSetWindowUserPointer(mainWindow, this);	// this is the owner here. We are assigning a owner to mainWindow
+	//	We are using this function to save the owner of the main window to GLFW and access it in a static function outside our class!
+	//	this is the owner (user pointer) here. We are assigning a owner to mainWindow
+	glfwSetWindowUserPointer(mainWindow, this);	
 
 	return 0;
 }
 
 void Window::createCallbacks()
 {
-	glfwSetKeyCallback(mainWindow, handleKeys);	// whenever a key is pressed do a callback to handle keys with the right arguments
-	glfwSetCursorPosCallback(mainWindow, handleMouse);	//like wise for mouse
+	glfwSetKeyCallback(mainWindow, handleKeys);	
+	glfwSetCursorPosCallback(mainWindow, handleMouse);
+	glfwSetFramebufferSizeCallback(mainWindow, handleWindowResize);
 }
 
 GLfloat Window::getXChange()
@@ -108,18 +99,18 @@ GLfloat Window::getYChange()
 
 void Window::handleKeys(GLFWwindow* window, int key, int code, int action, int mode)
 {
-	Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));// now we got the owner who is using the mainWIndow: smart!
+	//	Now we got the owner who is using the mainWindow, so that we can access keys in this function
+	Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
 
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
-		
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
 	if (key >= 0 && key < 1024)
 	{
 		if (action == GLFW_PRESS)
 		{
-			theWindow->keys[key] = true;
+			theWindow->keys[key] = true;	//	here
 		}
 		else if (action == GLFW_RELEASE)
 		{
@@ -142,13 +133,14 @@ void Window::handleMouse(GLFWwindow* window, double xPos, double yPos)
 	theWindow->xChange = xPos - theWindow->lastX;
 	theWindow->yChange = theWindow->lastY - yPos;	// To avoid inverted controls
 
-	// Get ready for the next iteration
 	theWindow->lastX = xPos;
 	theWindow->lastY = yPos;
-
-
 }
 
+void Window::handleWindowResize(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
+}
 
 Window::~Window()
 {
