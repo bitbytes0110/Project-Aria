@@ -4,7 +4,7 @@
 #include <GLFW\glfw3.h>
 
 #define WIDTH 1200	// <----set your Window dimensions here
-#define HEIGHT 900
+#define HEIGHT 900	
 
 #include <iostream>
 using namespace std;

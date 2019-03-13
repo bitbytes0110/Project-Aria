@@ -26,6 +26,10 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 {
 	GLfloat velocity = moveSpeed * deltaTime;
 
+	if (keys[GLFW_KEY_LEFT_SHIFT])
+	{
+		velocity *= 0.2f;
+	}
 	if (keys[GLFW_KEY_W])
 	{
 		position += front * velocity;
@@ -44,12 +48,13 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 	}
 	if (keys[GLFW_KEY_Q])
 	{
-		position += up * velocity;
+		position -= up * velocity;
 	}
 	if (keys[GLFW_KEY_E])
 	{
-		position -= up * velocity;
+		position += up * velocity;
 	}
+	
 	//	We are not changing angle, pitch and yaw won't change, so we don't need to call update
 }
 
