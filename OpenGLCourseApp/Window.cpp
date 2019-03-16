@@ -126,7 +126,7 @@ void Window::handleMouse(GLFWwindow* window, double xPos, double yPos)
 	if (theWindow->mouseFirstMoved)
 	{
 		theWindow->lastX = xPos;
-		theWindow->lastX = yPos;
+		theWindow->lastY = yPos;
 		theWindow->mouseFirstMoved = false;
 	}
 
