@@ -3,8 +3,8 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
-#define WIDTH 1200	// <----set your Window dimensions here
-#define HEIGHT 900	
+#define WIDTH 1600	// <----set your Window dimensions here
+#define HEIGHT 1200	
 
 #include <iostream>
 using namespace std;
