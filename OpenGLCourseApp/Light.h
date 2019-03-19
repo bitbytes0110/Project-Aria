@@ -16,4 +16,3 @@ protected:
 	GLfloat ambientIntensity;
 	GLfloat diffuseIntensity;
 };
-

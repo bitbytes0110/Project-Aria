@@ -28,6 +28,10 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 
 	if (keys[GLFW_KEY_LEFT_SHIFT])
 	{
+		velocity *= 2.0f;
+	}
+	if (keys[GLFW_KEY_LEFT_CONTROL])
+	{
 		velocity *= 0.2f;
 	}
 	if (keys[GLFW_KEY_W])
