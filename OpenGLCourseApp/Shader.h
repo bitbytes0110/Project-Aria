@@ -10,6 +10,7 @@
 
 #include "DirectionalLight.h"
 #include "PointLight.h"
+#include "SpotLight.h"
 
 using namespace std;
 
@@ -38,6 +39,7 @@ public:
 
 	void	SetDirectionalLight(DirectionalLight* dLight);
 	void	SetPointLights(PointLight* pLight, unsigned int lightCount);
+	void	SetSpotLights(SpotLight* sLight, unsigned int lightCount);
 
 	void	UseShader();
 	void	ClearShader();
@@ -45,6 +47,7 @@ public:
 
 private:
 	int pointLightCount;
+	int spotLightCount;
 	GLuint shaderID, uniformProjectionID, uniformModelID, uniformViewID, uniformEyePosition,
 		uniformSpecularIntensityID, uniformSpecularShininessID;
 
@@ -66,13 +69,29 @@ private:
 		GLuint	aConstantID;
 		GLuint	aLinearID;
 		GLuint	aExponentID;
+	};
 
+	struct uniformSpotLightsStruct
+	{
+		GLuint	colourID;
+		GLuint	aIntensityID;
+		GLuint	dIntensityID;
+		GLuint	positionID;
+
+		GLuint	aConstantID;
+		GLuint	aLinearID;
+		GLuint	aExponentID;
+
+		GLuint	directionID;
+		GLuint	edgeID;
 	};
 
 	uniformDirectionalLightStruct uniformDirectionalLight;
 
 	uniformPointLightStruct uniformPointLights[MAX_POINT_LIGHTS];
+	uniformSpotLightsStruct uniformSpotLights[MAX_SPOT_LIGHTS];
 	GLuint uniformPointLightCount;
+	GLuint uniformSpotLightCount;
 
 	void	CompileShader(const char* vertexCode, const char* fragmentCode);
 	void	AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType);

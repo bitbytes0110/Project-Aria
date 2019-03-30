@@ -15,7 +15,7 @@ public:
 					GLuint constantLocation, GLuint linearLocation, GLuint exponentLocation);
 	~PointLight();
 
-private:
+protected:
 	glm::vec3 position;
 
 	//	Needed for calculating Attenuation factor
